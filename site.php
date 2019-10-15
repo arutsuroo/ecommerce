@@ -32,11 +32,11 @@ $app->get("/categories/:idcategory", function($idcategory){
     
     $pages = [];
     
-    for ($i = 1; $i <= $pagination['pages'; $i++]){
+    for ($i=1; $i <= $pagination['pages']; $i++){
         array_push($pages, [
-            'link'=>"/categories/".$category->getidcategory()."?page=".$i,
+            'link'=>'/categories/'.$category->getidcategory().'?page='.$i,
             'page'=>$i
-        ])
+        ]);
     }
     
     $page = new Page();
@@ -78,7 +78,7 @@ $app->get("/cart", function(){
 
 $app->get("/cart/:idproduct/add", function($idproduct){
    
-    $product = new Product()
+    $product = new Product();
         
     $product->get((int)$idproduct);
     
@@ -98,7 +98,7 @@ $app->get("/cart/:idproduct/add", function($idproduct){
 
 $app->get("/cart/:idproduct/minus", function($idproduct){
    
-    $product = new Product()
+    $product = new Product();
         
     $product->get((int)$idproduct);
     
@@ -112,7 +112,7 @@ $app->get("/cart/:idproduct/minus", function($idproduct){
 
 $app->get("/cart/:idproduct/remove", function($idproduct){
    
-    $product = new Product()
+    $product = new Product();
         
     $product->get((int)$idproduct);
     
@@ -124,7 +124,7 @@ $app->get("/cart/:idproduct/remove", function($idproduct){
     exit;
 });
 
-$app->post("/cart/freight", fumction(){
+$app->post("/cart/freight", function(){
    
     $cart = Cart::getFromSession();
     
@@ -236,7 +236,7 @@ $app->post("/register", function(){
     
     $user->save();
     
-    User::login($_POST['email'], 'despassword'=>$_POST['password']);
+    User::login($_POST['email'], $_POST['password']);
 
     header('Location: /checkout');
     exit;
@@ -296,6 +296,71 @@ $app->post("/forgot/reset", function() {
       $page = new Page();
     
     $page->setTpl("forgot-reset-sucess");
+});
+
+$app->get("/profile", function (){
+   
+    User::verifyLogin(false);
+    
+    $user = User::getFromSession();
+    
+    $page = new Page();
+    
+    $page->setTpl("profile", [
+        'user'=>$user->getValues(),
+        'profileMsg'=>User::getSucess(),
+        'profileError'=>User::getError()
+    ]);
+});
+
+$app->post("/profile", function (){
+    
+    User::verifyLogin(false);
+    
+    if (!isset($_POST['desperson']) || $_POST['desperson'] == ''){
+        
+        User::setError("Preencha o seu nome.");
+        
+        header('Location: /profile');
+        exit;
+    }
+    
+    if (!isset($_POST['desemail']) || $_POST['desemail'] == ''){
+        
+        User::setError("Preencha o seu email.");
+        
+        header('Location: /profile');
+        exit;
+    }
+    
+    $user = User::getFromSession(); 
+    
+    if ($_POST['desemail'] !== $user->getdesemail()) {
+        
+       if (User::checkLoginExists($_POST['desemail']) === true){
+           
+           User::setError("Este endereço de email já está cadastrado.");
+           
+           header('Location: /profile');
+           exit;
+           
+       }
+    }
+    
+    
+    $_POST['deslogin'] = $_POST['desemail'];
+    $_POST['inadmin'] = $user->getinadmin();
+    $_POST['despassword'] = $user->getdespassword();
+    
+    $user->setData($_POST); 
+    
+    $user->update();
+    
+    User::setSucces("Dados salvos com sucesso!");
+    
+    header('Location: /profile');
+    exit; 
+    
 });
 
 ?>

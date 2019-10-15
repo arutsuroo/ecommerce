@@ -21,9 +21,9 @@ class User extends Model{
         
         $user = new User();
         
-        if(isset($_SESSION[Cart::SESSION] && (int)$_SESSION[Cart::SESSION]['iduser'] > 0)){
+        if (isset($_SESSION[User::SESSION]) && (int)$_SESSION[User::SESSION]['iduser'] > 0) {
             
-            $user->setData($_SESSION[Cart::SESSION])
+            $user->setData($_SESSION[User::SESSION]);
             
         }
         
@@ -285,6 +285,44 @@ class User extends Model{
            'cost'=>12 
         ]);
     }
+    
+    public static function setError($msg)
+	{
+		$_SESSION[User::ERROR] = $msg;
+	}
+    
+	public static function getError()
+	{
+		$msg = (isset($_SESSION[User::ERROR]) && $_SESSION[User::ERROR]) ? $_SESSION[User::ERROR] : '';
+        
+		User::clearError();
+        
+		return $msg;
+	}
+    
+	public static function clearError()
+	{
+		$_SESSION[User::ERROR] = NULL;
+	}
+    
+	public static function setSuccess($msg)
+	{
+		$_SESSION[User::SUCCESS] = $msg;
+	}
+    
+	public static function getSuccess()
+	{
+		$msg = (isset($_SESSION[User::SUCCESS]) && $_SESSION[User::SUCCESS]) ? $_SESSION[User::SUCCESS] : '';
+        
+		User::clearSuccess();
+		
+        return $msg;
+	}
+    
+	public static function clearSuccess()
+	{
+		$_SESSION[User::SUCCESS] = NULL;
+	}
     
     public static function setErrorRegister($msg)
     {

@@ -14,7 +14,7 @@ class Product extends Model{
         return $sql->select("SELECT * FROM tb_products ORDER BY desproduct");
     }
   
-    public static function checkList($List)
+    public static function checkList($list)
     {
         foreach($list as &$row){
             
@@ -121,7 +121,7 @@ class Product extends Model{
             "site" . DIRECTORY_SEPARATOR.
             "img" . DIRECTORY_SEPARATOR. 
             "products" . DIRECTORY_SEPARATOR.
-            $this->getidproduct() . ".jpg"
+            $this->getidproduct() . ".jpg";
         
         imagejpeg($image, $dist);
         

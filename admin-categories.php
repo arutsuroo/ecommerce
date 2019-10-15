@@ -117,7 +117,7 @@ $app->get("/admin/categories/:idcategory/products/:idproduct/add", function($idc
     
     $product = new Product();
     
-    $product->get((get)$idproduct);
+    $product->get((int)$idproduct);
     
     $category->addProduct($product);
     
@@ -136,7 +136,7 @@ $app->get("/admin/categories/:idcategory/products/:idproduct/remove", function($
     
     $product = new Product();
     
-    $product->get((get)$idproduct);
+    $product->get((int)$idproduct);
     
     $category->removeProduct($product);
     
