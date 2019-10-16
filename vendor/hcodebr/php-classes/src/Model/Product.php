@@ -30,7 +30,7 @@ class Product extends Model{
     {
         $sql = new Sql();
         
-        $result = $sql->select("CALL sp_products_save(:idproduct, :desproduct, :vlprice, :vlwidth, :vlheight, :vllenght, :vlweight, :desurl)", array(
+        $results = $sql->select("CALL sp_products_save(:idproduct, :desproduct, :vlprice, :vlwidth, :vlheight, :vllenght, :vlweight, :desurl)", array(
             ":idproduct"=>$this->getidproduct(),
             ":desproduct"=>$this->getdesproduct(),
             ":vlprice"=>$this->getvlprice(),
@@ -41,7 +41,7 @@ class Product extends Model{
             ":desurl"=>$this->getdesurl(),
         ));
         
-        $this->setData($result[0]);
+        $this->setData($results[0]);
     }
     
     public function get($idproduct)
@@ -150,7 +150,7 @@ class Product extends Model{
             FROM tb_categories a
             INNER JOIN tb_productscategories b ON a.idcategory = b.idcategory
             WHERE b.idproduct = :idproduct", [
-                'idproduct'=>$this->getidproduct()
+                ':idproduct'=>$this->getidproduct()
             ]);
     }
 }
